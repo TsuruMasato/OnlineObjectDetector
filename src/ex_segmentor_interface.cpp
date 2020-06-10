@@ -88,7 +88,7 @@ geometry_msgs::TransformStamped ex_segmentor::convert_result_TF(const Eigen::Mat
 {
   geometry_msgs::TransformStamped tf_msg;
   tf_msg.header.stamp = ros::Time::now();
-  tf_msg.header.frame_id = camera_flame_id_;
+  tf_msg.header.frame_id = result_flame_id_;
   //tf_msg.header.frame_id = "/map";
   tf_msg.child_frame_id = "/target_object";
 
@@ -111,7 +111,7 @@ geometry_msgs::TransformStamped ex_segmentor::convert_result_TF(const ResultInfo
 {
   geometry_msgs::TransformStamped tf_msg;
   tf_msg.header.stamp = ros::Time::now();
-  tf_msg.header.frame_id = camera_flame_id_;
+  tf_msg.header.frame_id = result_flame_id_;
   //tf_msg.header.frame_id = "/map";
   tf_msg.child_frame_id = "/target_object";
 
@@ -130,7 +130,7 @@ geometry_msgs::PoseStamped ex_segmentor::convert_result_Pose(const Eigen::Matrix
 {
   geometry_msgs::PoseStamped pose_msg;
   pose_msg.header.stamp = ros::Time::now();
-  pose_msg.header.frame_id = camera_flame_id_;
+  pose_msg.header.frame_id = result_flame_id_;
 
   Eigen::Vector3f result_pos(result(0, 3), result(1, 3), result(2, 3));
   Eigen::Matrix3f result_rot = result.topLeftCorner(3, 3);
@@ -150,7 +150,7 @@ geometry_msgs::PoseStamped ex_segmentor::convert_result_Pose(const ResultInforma
 {
   geometry_msgs::PoseStamped pose_msg;
   pose_msg.header.stamp = ros::Time::now();
-  pose_msg.header.frame_id = camera_flame_id_;
+  pose_msg.header.frame_id = result_flame_id_;
 
   pose_msg.pose.position.x = result.pos.x();
   pose_msg.pose.position.y = result.pos.y();
@@ -186,7 +186,7 @@ sensor_msgs::PointCloud2 ex_segmentor::convert_result_PC2msg(const Eigen::Matrix
 sensor_msgs::PointCloud2 ex_segmentor::convert_result_PC2msg(const Eigen::Matrix4f &result, uint8_t color_r, uint8_t color_g, uint8_t color_b)
 {
   sensor_msgs::PointCloud2 cloud_msg;
-  cloud_msg.header.frame_id = camera_flame_id_;
+  cloud_msg.header.frame_id = result_flame_id_;
   cloud_msg.header.stamp = ros::Time::now();
 
   pcl::PointCloud<PointXYZRGB>::Ptr transformed_pc(new pcl::PointCloud<PointXYZRGB>);

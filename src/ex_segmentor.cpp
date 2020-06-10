@@ -88,7 +88,7 @@ bool ex_segmentor::run()
     return false;
   }
 
-  config(*nh_);
+  //config(*nh_);
 
   if (!input_clouds_check())
   {

@@ -91,12 +91,12 @@ public:
   void config(ros::NodeHandle &nh_private);
   bool input_clouds_check();
   bool init();
-  void set_camera_flame_id(std::string &flame) { camera_flame_id_ = flame; };
-  void set_scene(pcl::PointCloud<PointXYZRGB>::Ptr &scene_cloud)
+  void set_result_flame_id(std::string &flame) { result_flame_id_ = flame; };
+  void set_scene(pcl::PointCloud<PointXYZRGB>::Ptr &input_cloud)
   {
     scene_->clear();
     debug_cloud_->clear();
-    pcl::copyPointCloud(*scene_cloud, *scene_);
+    pcl::copyPointCloud(*input_cloud, *scene_);
   };
   bool set_object_from_PCD_file(std::string &target_object_pcd_path);
   template <typename PointCloudPtr>
@@ -126,7 +126,7 @@ public:
   void add_candidate_to_debug_cloud(const Eigen::Matrix4f &result, uint8_t color_r = 255, uint8_t color_g = 0, uint8_t color_b = 0);
   void add_pointcloud_to_debug_cloud(pcl::PointCloud<PointXYZRGB> target, uint8_t color_r = 255, uint8_t color_g = 0, uint8_t color_b = 0);
 
-  std::string get_camera_flame_id() { return camera_flame_id_; };
+  std::string get_result_flame_id() { return result_flame_id_; };
 
   void switch_to_local_mode()
   {
@@ -204,7 +204,7 @@ protected:
   /* additional ros joint functions */
 
   void camera_odom_callback(const nav_msgs::Odometry &input);
-  void point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &input);
+  void point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &input_msg);
   void publish_all_reults();
 
   /* communication flags */
@@ -241,7 +241,7 @@ protected:
   std::atomic<float> minimum_error_;
   std::atomic<float> extrime_icp_error_;
   //std::atomic<float> first_minimum_error_;
-  std::string camera_flame_id_ = std::string("map");
+  std::string result_flame_id_ = std::string("map");
   std::string target_object_pcd_path_;
   std::string camera_odom_topic_;
   std::string point_cloud_subscribe_topic_;
