@@ -10,8 +10,9 @@ ex_segmentor::ex_segmentor(ros::NodeHandle &nh)
 
   config(*nh_);
   nh_->setParam("test", 10);
-  ros::Subscriber sub_camera_odom = nh_->subscribe<nav_msgs::Odometry>(camera_odom_topic_, 1, &ex_segmentor::update_camera_pos, this);
-  ros::Subscriber sub_point_cloud = nh_->subscribe<sensor_msgs::PointCloud2>("/camera/depth_registered/points", 1, &ex_segmentor::point_cloud_callback, this);
+  LOG_INFO("point_cloud_subscribe_topic_ :" << point_cloud_subscribe_topic_);
+  sub_camera_odom_ = nh_->subscribe<nav_msgs::Odometry>(camera_odom_topic_, 1, &ex_segmentor::update_camera_pos, this);
+  sub_point_cloud_ = nh_->subscribe<sensor_msgs::PointCloud2>(point_cloud_subscribe_topic_, 1, &ex_segmentor::point_cloud_callback, this);
 
   set_object_from_PCD_file(target_object_pcd_path_);
   init();

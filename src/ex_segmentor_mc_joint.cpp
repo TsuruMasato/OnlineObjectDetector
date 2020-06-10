@@ -20,6 +20,7 @@ void ex_segmentor::config(ros::NodeHandle &nh_private)
   nh_->param("publish_result_as_original_msg", publish_result_as_original_msg_, true);
   nh_->param("publish_result_as_PC2", publish_result_as_PC2_, false);
   nh_->param("debug_mode", debug_mode_, true);
+  LOG_INFO("point_cloud_subscribe_topic_ :" << point_cloud_subscribe_topic_);
 }
 
 void ex_segmentor::point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &input)

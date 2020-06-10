@@ -221,6 +221,8 @@ protected:
   ros::Publisher pub_pose_;
   ros::Publisher pub_pc2_;
   ros::Publisher pub_debug_;
+  ros::Subscriber sub_camera_odom_;
+  ros::Subscriber sub_point_cloud_;
 
   /* config params */
 
