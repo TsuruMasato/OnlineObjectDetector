@@ -250,7 +250,7 @@ void ex_segmentor::add_pointcloud_to_debug_cloud(pcl::PointCloud<PointXYZRGB> ta
 
 void ex_segmentor::update_camera_pos(const nav_msgs::OdometryConstPtr &input)
 {
-  LOG_INFO("camera callback")
+  //LOG_INFO("camera callback")
   latest_camera_pos_ = *input;
   camera_pos_ready_ = true;
 }

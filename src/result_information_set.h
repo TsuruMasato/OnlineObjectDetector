@@ -7,7 +7,7 @@ namespace segmentor
 class ResultInformationSet
 {
 public:
-    ResultInformationSet() { transform = Eigen::Matrix4f::Identity(); };
+    ResultInformationSet() { transform = Eigen::Matrix4f::Identity(); icp_score = -10; };
     ResultInformationSet(Eigen::Matrix4f &input_transform, double input_icp_score)
     {
         pos = Eigen::Vector3f(input_transform(0, 3), input_transform(1, 3), input_transform(2, 3));

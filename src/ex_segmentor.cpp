@@ -9,10 +9,12 @@ ex_segmentor::ex_segmentor(ros::NodeHandle &nh)
   // private NodeHandle for parameters and private messages (debug / info)
 
   config(*nh_);
-  nh_->setParam("test", 10);
-  LOG_INFO("point_cloud_subscribe_topic_ :" << point_cloud_subscribe_topic_);
   sub_camera_odom_ = nh_->subscribe<nav_msgs::Odometry>(camera_odom_topic_, 1, &ex_segmentor::update_camera_pos, this);
   sub_point_cloud_ = nh_->subscribe<sensor_msgs::PointCloud2>(point_cloud_subscribe_topic_, 1, &ex_segmentor::point_cloud_callback, this);
+  pub_pose_ = nh_->advertise<geometry_msgs::PoseStamped>("detection_result", 1);
+  pub_pc2_ = nh_->advertise<sensor_msgs::PointCloud2>("icp_result", 1);
+  pub_original_msg_ = nh_->advertise<mc_slam_project_msgs::objpos_viewpos>("result_msg", 1);
+  pub_debug_ = nh_->advertise<sensor_msgs::PointCloud2>("inner_debug", 1);
 
   set_object_from_PCD_file(target_object_pcd_path_);
   init();
@@ -70,7 +72,7 @@ void ex_segmentor::config()
 
 bool ex_segmentor::run()
 {
-  LOG_INFO("start run()")
+  //LOG_INFO("start run()")
   if (!initialized_)
   {
     LOG_ERROR("Please initialize this instance by init()")
