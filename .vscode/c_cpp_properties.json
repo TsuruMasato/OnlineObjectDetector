@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/eigen3",
+                "/opt/ros/melodic/share/**",
+                "/opt/ros/melodic/lib/**",
+                "/opt/ros/melodic/include/**",
+                "/usr/include/pcl-1.8",
+                "/usr/include/eigen3/Eigen",
+                "~/src/catkin_ws/src/grid_map/**",
+                "~/src/catkin_ws/devel/.private/mc_slam_project_msgs/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "configurationProvider": "vector-of-bool.cmake-tools"
+        }
+    ],
+    "version": 4
+}
