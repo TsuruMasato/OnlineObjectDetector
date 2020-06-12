@@ -8,7 +8,7 @@ int main(int argc, char **argv)
 
   // Get params
   double frequency;
-  nh.param("subscribe_frequency", frequency, 1.0);
+  nh.param("subscribe_frequency", frequency, 5.0);
   segmentor::ex_segmentor ex_segmentor(nh);
 
   // Main loop

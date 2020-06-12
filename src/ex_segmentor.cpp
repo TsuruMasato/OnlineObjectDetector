@@ -39,6 +39,7 @@ bool ex_segmentor::init()
   FPFH_generation(object_, object_feature_);
   minimum_error_ = 100.0f;
   //first_minimum_error_ = 100.0f;
+  reset_best_result();
 
   has_been_outside_ = false;
   point_cloud_ready_ = false;
@@ -555,7 +556,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
     icp_registration(object_aligned, cluster, Final, icp_result_transform, icp_error);
     if (icp_error < icp_bottom_th_)
     {
-      add_pointcloud_to_debug_cloud(*Final, 0, 0, 200);
+      //add_pointcloud_to_debug_cloud(*Final, 0, 0, 200);
       //ROS_ERROR("ICP success; score : %f", icp_score);
       Eigen::Matrix4f total_transform = icp_result_transform * align_result_transform;
 
@@ -673,10 +674,10 @@ void ex_segmentor::three_steps_ICP_registration(Eigen::Matrix4f input_matrix)
   //回転
   pcl::PointCloud<PointXYZRGB>::Ptr rotated(new pcl::PointCloud<PointXYZRGB>);
   pcl::transformPointCloud(*object_, *rotated, input_matrix);
-  {
-    std::lock_guard<std::mutex> lock(mutex_best_cloud_);
-    add_pointcloud_to_debug_cloud(*rotated);
-  }
+  // {
+  //   std::lock_guard<std::mutex> lock(mutex_best_cloud_);
+  //   add_pointcloud_to_debug_cloud(*rotated);
+  // }
 
   float first_icp_error, second_icp_error, extrime_icp_error;
   Eigen::Matrix4f first_icp_transform, second_icp_transform, extrime_icp_transform;

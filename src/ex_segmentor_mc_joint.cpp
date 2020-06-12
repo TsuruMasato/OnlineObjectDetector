@@ -20,8 +20,14 @@ void ex_segmentor::config(ros::NodeHandle &nh_private)
   nh_->param("publish_result_as_original_msg", publish_result_as_original_msg_, true);
   nh_->param("publish_result_as_PC2", publish_result_as_PC2_, false);
   nh_->param("debug_mode", debug_mode_, true);
+  bool reset_flag = false;
+  if (nh_->getParam("reset_best_result", reset_flag) && reset_flag)
+  {
+    reset_best_result();
+    nh_->setParam("reset_best_result", false);
+  }
   //LOG_INFO("point_cloud_subscribe_topic_ :" << point_cloud_subscribe_topic_);
-  LOG_INFO("voxel_filter_enable_ :" << voxel_filter_enable_);
+  //LOG_INFO("voxel_filter_enable_ :" << voxel_filter_enable_);
 }
 
 void ex_segmentor::point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &input_msg)
@@ -63,6 +69,8 @@ void ex_segmentor::publish_all_reults()
   if (publish_best_result_ && best_result_.icp_score > 0.0f)
   {
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_));
+    tfBroadcaster_.sendTransform(convert_result_TF(best_result_, std::string("target_object/base_link")));
+    tfBroadcaster_.sendTransform(convert_result_TF(best_result_, std::string("target_object/body_link")));
     if (is_best_result_updated() /* && is_grobal_mode() */)
     {
       //std::cout << "now add score to the highest pos" << std::endl;

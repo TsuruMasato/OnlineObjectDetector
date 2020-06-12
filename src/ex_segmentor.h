@@ -118,6 +118,7 @@ public:
   geometry_msgs::TransformStamped convert_result_TF(const Eigen::Matrix4f &result, const std::string &flame_from, const std::string &flame_to);
   geometry_msgs::TransformStamped convert_result_TF(const Eigen::Matrix4f &result);
   geometry_msgs::TransformStamped convert_result_TF(const ResultInformationSet &result);
+  geometry_msgs::TransformStamped convert_result_TF(const ResultInformationSet &result, std::string flame_name);
   geometry_msgs::PoseStamped convert_result_Pose(const Eigen::Matrix4f &result);
   geometry_msgs::PoseStamped convert_result_Pose(const ResultInformationSet &result);
   sensor_msgs::PointCloud2 convert_result_PC2msg(const Eigen::Matrix4f &result, const std::string &flame, uint8_t color_r = 255, uint8_t color_g = 0, uint8_t color_b = 0);

@@ -126,6 +126,25 @@ geometry_msgs::TransformStamped ex_segmentor::convert_result_TF(const ResultInfo
   return tf_msg;
 }
 
+geometry_msgs::TransformStamped ex_segmentor::convert_result_TF(const ResultInformationSet &result, std::string flame_name)
+{
+  geometry_msgs::TransformStamped tf_msg;
+  tf_msg.header.stamp = ros::Time::now();
+  tf_msg.header.frame_id = result_flame_id_;
+  //tf_msg.header.frame_id = "/map";
+  tf_msg.child_frame_id = flame_name;
+
+  tf_msg.transform.translation.x = result.pos.x();
+  tf_msg.transform.translation.y = result.pos.y();
+  tf_msg.transform.translation.z = result.pos.z();
+  tf_msg.transform.rotation.w = result.quat.w();
+  tf_msg.transform.rotation.x = result.quat.x();
+  tf_msg.transform.rotation.y = result.quat.y();
+  tf_msg.transform.rotation.z = result.quat.z();
+
+  return tf_msg;
+}
+
 geometry_msgs::PoseStamped ex_segmentor::convert_result_Pose(const Eigen::Matrix4f &result)
 {
   geometry_msgs::PoseStamped pose_msg;
