@@ -22,7 +22,8 @@ How to run :
 
 If you don't have PCD file, you can use PCD generator.
 
-rosrun online_object_detector pcd_generator **your 3D model** **output file name**
+
+1. rosrun online_object_detector pcd_generator **your 3D model** **output file name**
 
 
 and you can see the estimation result in Rviz, at camera flame.
