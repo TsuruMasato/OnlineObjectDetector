@@ -16,7 +16,7 @@ catkin build (or catkin_make)
 How to run :
 
 1. roslaunch openni2_launch openni2.launch
-2. rosparam set target_object_pcd_path **your object path**
+2. rosparam set target_object_pcd_path **your object's PCD file path**
 3. rosrun online_object_detector
 
 
