@@ -17,7 +17,12 @@ How to run :
 
 1. roslaunch openni2_launch openni2.launch
 2. rosparam set target_object_pcd_path **your object's PCD file path**
-3. rosrun online_object_detector
+3. rosrun online_object_detector online_object_detector
+
+
+If you don't have PCD file, you can use PCD generator.
+
+rosrun online_object_detector pcd_generator **your 3D model** **output file name**
 
 
 and you can see the estimation result in Rviz, at camera flame.
