@@ -138,6 +138,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(online_object_detector src/node.cpp src/ex_segmentor_interface.cpp src/ex_segmentor_mc_joint.cpp src/ex_segmentor.cpp)
+add_executable(pcd_generator src/generate_PCD_from_STL.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -151,6 +152,7 @@ add_executable(online_object_detector src/node.cpp src/ex_segmentor_interface.cp
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(online_object_detector ${catkin_LIBRARIES})
+target_link_libraries(pcd_generator ${catkin_LIBRARIES})
 
 #############
 ## Install ##
