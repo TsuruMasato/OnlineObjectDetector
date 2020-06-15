@@ -16,14 +16,14 @@ catkin build (or catkin_make)
 How to run :
 
 1. roslaunch openni2_launch openni2.launch
-2. rosparam set target_object_pcd_path **your object's PCD file path**
+2. rosparam set target_object_pcd_path **your_object's_PCD_file**
 3. rosrun online_object_detector online_object_detector
 
 
 If you don't have PCD file, you can use PCD generator.
 
 
-1. rosrun online_object_detector pcd_generator **your 3D model** **output file name**
+1. rosrun online_object_detector pcd_generator **your_3D_model** **output_file_name**
 
 
 and you can see the estimation result in Rviz, at camera flame.
