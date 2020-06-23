@@ -218,6 +218,7 @@ protected:
   tf2_ros::Buffer tfBuffer_;
   tf2_ros::TransformBroadcaster tfBroadcaster_;
   tf2_ros::TransformListener tfListener{tfBuffer_};
+  ros::Publisher pub_pose_best_;
   ros::Publisher pub_original_msg_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_pc2_;

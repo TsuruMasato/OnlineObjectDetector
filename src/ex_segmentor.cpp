@@ -12,6 +12,7 @@ ex_segmentor::ex_segmentor(ros::NodeHandle &nh)
   sub_camera_odom_ = nh_->subscribe<nav_msgs::Odometry>(camera_odom_topic_, 1, &ex_segmentor::update_camera_pos, this);
   sub_point_cloud_ = nh_->subscribe<sensor_msgs::PointCloud2>(point_cloud_subscribe_topic_, 1, &ex_segmentor::point_cloud_callback, this);
   pub_pose_ = nh_->advertise<geometry_msgs::PoseStamped>("detection_result", 1);
+  pub_pose_best_ = nh_->advertise<geometry_msgs::PoseStamped>("best_result", 1);
   pub_pc2_ = nh_->advertise<sensor_msgs::PointCloud2>("icp_result", 1);
   pub_original_msg_ = nh_->advertise<mc_slam_project_msgs::objpos_viewpos>("result_msg", 1);
   pub_debug_ = nh_->advertise<sensor_msgs::PointCloud2>("inner_debug", 1);
