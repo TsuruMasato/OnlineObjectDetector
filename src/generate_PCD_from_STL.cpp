@@ -50,7 +50,11 @@
 #include <pcl/console/print.h>
 #include <pcl/console/parse.h>
 
-//#define CONVERT_MM_TO_METER
+#include <GL/glut.h>
+#include <vtkAutoInit.h>
+VTK_MODULE_INIT(vtkRenderingOpenGL);
+
+#define CONVERT_MM_TO_METER
 
 inline double
 uniform_deviate(int seed)
@@ -239,6 +243,8 @@ int main(int argc, char **argv)
         return (-1);
     }
 
+    print_info("start convertion\n");
+
     vtkSmartPointer<vtkPolyData> polydata1 = vtkSmartPointer<vtkPolyData>::New();
     if (ply_file_indices.size() == 1)
     {
@@ -260,6 +266,7 @@ int main(int argc, char **argv)
         pcl::io::mesh2vtk(mesh, polydata1);
     }
 
+    print_info("process 1\n");
     //make sure that the polygons are triangles!
     vtkSmartPointer<vtkTriangleFilter> triangleFilter = vtkSmartPointer<vtkTriangleFilter>::New();
     triangleFilter->SetInputData(polydata1);
@@ -286,6 +293,7 @@ int main(int argc, char **argv)
     }
 #endif
 
+    print_info("process 2\n");
     // Voxelgrid
     VoxelGrid<PointXYZRGBNormal> grid_;
     grid_.setInputCloud(cloud_1);
