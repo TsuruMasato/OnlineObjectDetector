@@ -1,0 +1,58 @@
+<launch>
+
+  <node name="online_object_detector" pkg="online_object_detector" type="online_object_detector"> </node>
+
+  <!-- <arg name="bagfile" default="/home/masato/rosbag/HRP2_Xtion_all_middle.bag"/> -->
+	<arg name="imagestopicname" default="/camera/rgb/image_rect_color"/>
+	<arg name="posetopicname" default="/grabo/pose"/>
+  <arg name="initialposetopicname" default="target_object"/>
+  <arg name="optimalInitialposetopicname" default="/grabo/pose/optimal_init"/>
+	<arg name="imagesdisplay" default="1"/>
+	<arg name="maskdir" default="/home/gcaron/Data/Bobin/Acquisitions/static_poseInit/fisheye/candPoses/images_424x400/"/>
+	<arg name="modelfilename" default="/home/masato/src/catkin_ws/grabo_RGB_PC.ply"/>
+	<arg name="maskbasename" default="c_mask.png"/> 
+  <arg name="resetpose" default="1"/>
+  <arg name="nbinitreg" default="0"/>
+  <arg name="nbreg" default="1"/>
+  <arg name="manualpose" default="0"/>
+  <arg name="sigmainit" default="4.01"/>
+  <arg name="acquiredimageheight" default="480"/>
+  <arg name="acquiredimagewidth" default="640"/>
+  <arg name="fact" default="0.5"/>
+  <arg name="alphau" default="536.9832763671875"/>
+  <arg name="alphav" default="537.891845703125"/>
+  <arg name="u0" default="316.7287718592052"/>
+  <arg name="v0" default="238.0967943465294"/>
+  <arg name="xi" default="0.0"/>
+
+  <node name="direct_3d_registration" pkg="ros_po3dt" type="direct_3d_registration"> <!--  output="screen" -->
+  <param name="cameraTopic" type="string" value="$(arg imagestopicname)"/> 
+  <param name="poseTopic" type="string" value="$(arg posetopicname)"/>
+  <param name="initialPoseTopic" type="string" value="$(arg initialposetopicname)"/>
+  <param name="optimalInitialPoseTopic" type="string" value="$(arg optimalInitialposetopicname)"/>
+  <param name="opt_display" type="int" value="$(arg imagesdisplay)"/>
+	<param name="opt_maskdir" type="string" value="$(arg maskdir)"/>
+	<param name="opt_maskbasename" type="string" value="$(arg maskbasename)"/> 
+	<param name="opt_modelfilename" type="string" value="$(arg modelfilename)"/> 
+  <param name="opt_resetpose" type="int" value="$(arg resetpose)"/>
+  <param name="opt_nbinitreg" type="int" value="$(arg nbinitreg)"/>
+  <param name="opt_nbreg" type="int" value="$(arg nbreg)"/>
+  <param name="opt_manualpose" type="int" value="$(arg manualpose)"/>
+  <param name="opt_sigmainit" type="double" value="$(arg sigmainit)"/>
+  <param name="opt_height" type="int" value="$(arg acquiredimageheight)"/>
+  <param name="opt_width" type="int" value="$(arg acquiredimagewidth)"/>  
+  <param name="opt_fact" type="double" value="$(arg fact)"/>
+  <param name="opt_alphau" type="double" value="$(arg alphau)"/>
+  <param name="opt_alphav" type="double" value="$(arg alphav)"/>
+  <param name="opt_u0" type="double" value="$(arg u0)"/>
+  <param name="opt_v0" type="double" value="$(arg v0)"/>
+  <param name="opt_xi" type="double" value="$(arg xi)"/>
+
+<!--  <param name="image_transport" type="string" value="compressed"/> -->
+  </node>
+
+  <!-- <node pkg="rosbag" type="play" name="rosbag_data_play" args="$(arg bagfile)" launch-prefix="bash -c 'sleep 2s; $0 $@' "/> -->
+
+</launch>
+
+
