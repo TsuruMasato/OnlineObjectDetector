@@ -1,6 +1,6 @@
 <launch>
 
-  <node name="online_object_detector" pkg="online_object_detector" type="online_object_detector"> <!--output="screen"--> </node>
+  <node name="online_object_detector" pkg="online_object_detector" type="online_object_detector"> </node>
 
   <!-- <arg name="bagfile" default="/home/masato/rosbag/HRP2_Xtion_all_middle.bag"/> -->
 	<arg name="imagestopicname" default="/camera/rgb/image_rect_color"/>
@@ -25,7 +25,7 @@
   <arg name="v0" default="238.0967943465294"/>
   <arg name="xi" default="0.0"/>
 
-  <node name="direct_3d_registration" pkg="ros_po3dt" type="direct_3d_registration"> <!--  output="screen" -->
+  <node name="direct_3d_registration" launch-prefix="gdb --args" pkg="ros_po3dt" type="direct_3d_registration" output="screen"> <!--  output="screen" -->
   <param name="cameraTopic" type="string" value="$(arg imagestopicname)"/> 
   <param name="poseTopic" type="string" value="$(arg posetopicname)"/>
   <param name="initialPoseTopic" type="string" value="$(arg initialposetopicname)"/>

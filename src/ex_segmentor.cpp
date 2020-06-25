@@ -12,7 +12,7 @@ ex_segmentor::ex_segmentor(ros::NodeHandle &nh)
   sub_camera_odom_ = nh_->subscribe<nav_msgs::Odometry>(camera_odom_topic_, 1, &ex_segmentor::update_camera_pos, this);
   sub_point_cloud_ = nh_->subscribe<sensor_msgs::PointCloud2>(point_cloud_subscribe_topic_, 1, &ex_segmentor::point_cloud_callback, this);
   pub_pose_ = nh_->advertise<geometry_msgs::PoseStamped>("detection_result", 1);
-  pub_pose_best_ = nh_->advertise<geometry_msgs::PoseStamped>("best_result", 1);
+  //pub_pose_best_ = nh_->advertise<geometry_msgs::PoseStamped>("best_result", 1);
   pub_pc2_ = nh_->advertise<sensor_msgs::PointCloud2>("icp_result", 1);
   pub_original_msg_ = nh_->advertise<mc_slam_project_msgs::objpos_viewpos>("result_msg", 1);
   pub_debug_ = nh_->advertise<sensor_msgs::PointCloud2>("inner_debug", 1);
@@ -46,6 +46,8 @@ bool ex_segmentor::init()
   point_cloud_ready_ = false;
   camera_pos_ready_ = false;
   initialized_ = true;
+
+  FPFH_priority_score_ = 0.0f;
 
   return true;
 }
@@ -128,7 +130,7 @@ bool ex_segmentor::run()
 
   std::vector<std::thread> threads;
   results_vector_.clear();
-
+  std::cout << "start multithreads registration" << std::endl;
   for (size_t i = 0; i < clusters.size(); i++)
   {
     threads.emplace_back(std::thread(&ex_segmentor::object_registration, this, std::ref(clusters[i])));
@@ -145,9 +147,10 @@ bool ex_segmentor::run()
   {
     thread.join();
   }
+  std::cout << "finish multithreads registration" << std::endl;
 
   //ROS_INFO("%d results are stored in results_vector. Please use get_results_vector", results_vector_.size());
-  if (best_result_cloud_ != nullptr && best_result_cloud_->size() > 0)
+  if (best_result_cloud_ != nullptr && best_result_cloud_->size() > 0 && best_result_updated_)
   {
     if (is_best_result_inside())
     {
@@ -175,7 +178,7 @@ bool ex_segmentor::run()
       //   //detect that the object is not in sight.
       //   reset_best_result();
       // }
-      if (best_result_cloud_ != nullptr && best_result_updated_)
+      if (best_result_cloud_ != nullptr)
       {
         add_pointcloud_to_debug_cloud(*best_result_cloud_);
       }
@@ -202,6 +205,7 @@ bool ex_segmentor::input_clouds_check()
 
 void ex_segmentor::pass_through_filter(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &input_cloud)
 {
+  std::cout << "start pass_through_filter" << std::endl;
   calc_sight_center();
   // build the condition
   pcl::ConditionAnd<pcl::PointXYZRGB>::Ptr range_limit(new pcl::ConditionAnd<pcl::PointXYZRGB>);
@@ -223,6 +227,7 @@ void ex_segmentor::pass_through_filter(const pcl::PointCloud<pcl::PointXYZRGB>::
 
 bool ex_segmentor::is_best_result_inside()
 {
+  std::cout << "start is_best_result_inside" << std::endl;
   bool result = true;
   pcl::PointCloud<PointXYZRGB> surrounding_cloud;
 
@@ -518,6 +523,7 @@ void ex_segmentor::PCA_registration(pcl::PointCloud<PointXYZRGB>::Ptr &input_obj
 
 bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluster)
 {
+  std::cout << "start object_registration" << std::endl;
   statical_outlier_filter(cluster, 12, 3.0);
   //ROS_INFO("start object registration");
   float icp_error;
@@ -543,6 +549,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
   //calc Normals and calc FPFH features
   FPFHCloud::Ptr cluster_feature(new FPFHCloud);
   FPFH_generation(cluster, cluster_feature);
+  ROS_INFO("cluster_size : %d, feature size : %d", cluster->size(), cluster_feature->size());
   bool FPFH_match_success = FPFH_matching<PointXYZRGB>(object_, object_feature_, cluster, cluster_feature, object_aligned, align_result_transform);
   if (FPFH_match_success)
   {
@@ -576,6 +583,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
         update_best_result(total_transform, icp_error);
         std::lock_guard<std::mutex> lock_guad(cloud_update_mutex_);
         pcl::copyPointCloud(*Final, *best_result_cloud_);
+        best_result_updated_ = true;
       }
 
       return true;
@@ -597,7 +605,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
 
 void ex_segmentor::random_rotation()
 {
-
+  ROS_INFO("start random rotation");
   std::vector<std::thread> threads;
   extrime_icp_error_ = 100.0f;
   //Eigen::Matrix4f lowest_icp_result_transform;
@@ -672,6 +680,9 @@ void ex_segmentor::random_rotation()
 
 void ex_segmentor::three_steps_ICP_registration(Eigen::Matrix4f input_matrix)
 {
+  std::cout << "start three steps ICP" << std::endl;
+  //std::lock_guard<std::mutex> lock(mutex_best_cloud_);
+  
   //回転
   pcl::PointCloud<PointXYZRGB>::Ptr rotated(new pcl::PointCloud<PointXYZRGB>);
   pcl::transformPointCloud(*object_, *rotated, input_matrix);
@@ -689,7 +700,6 @@ void ex_segmentor::three_steps_ICP_registration(Eigen::Matrix4f input_matrix)
   {
     icp_registration(temp_icp_cloud, scene_, temp_icp_cloud, second_icp_transform, second_icp_error, 20, 0.02f, 0.01f);
     icp_registration(temp_icp_cloud, scene_, temp_icp_cloud, extrime_icp_transform, extrime_icp_error, 30, 0.017f, 0.01f);
-    best_result_updated_ = true;
     if (extrime_icp_error < extrime_icp_error_)
     {
       extrime_icp_error_ = extrime_icp_error;
@@ -699,9 +709,10 @@ void ex_segmentor::three_steps_ICP_registration(Eigen::Matrix4f input_matrix)
       Eigen::Matrix4f total_icp_transform = extrime_icp_transform * second_icp_transform * first_icp_transform * input_matrix;
       if(total_icp_transform.isUnitary())
       {
-        std::lock_guard<std::mutex> lock(mutex_best_cloud_);
+        //std::lock_guard<std::mutex> lock(mutex_best_cloud_);
         pcl::copyPointCloud(*temp_icp_cloud, *best_result_cloud_);
         update_best_result(total_icp_transform, extrime_icp_error);
+        best_result_updated_ = true;
       }
     }
   }

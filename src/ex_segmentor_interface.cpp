@@ -258,6 +258,7 @@ void ex_segmentor::add_candidate_to_debug_cloud(const Eigen::Matrix4f &result, u
 
 void ex_segmentor::add_pointcloud_to_debug_cloud(pcl::PointCloud<PointXYZRGB> target, uint8_t color_r, uint8_t color_g, uint8_t color_b)
 {
+  std::lock_guard<std::mutex> lock(mutex_debug_cloud_);
   for (size_t point = 0; point < target.size(); point++)
   {
     target.points[point].r = color_r;

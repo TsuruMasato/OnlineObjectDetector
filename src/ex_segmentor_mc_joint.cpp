@@ -71,7 +71,7 @@ void ex_segmentor::publish_all_reults()
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_));
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_, std::string("target_object/base_link")));
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_, std::string("target_object/body_link")));
-    pub_pose_best_.publish(convert_result_Pose(best_result_));
+    //pub_pose_best_.publish(convert_result_Pose(best_result_));
     if (is_best_result_updated() /* && is_grobal_mode() */)
     {
       //std::cout << "now add score to the highest pos" << std::endl;

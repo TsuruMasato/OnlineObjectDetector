@@ -218,7 +218,7 @@ protected:
   tf2_ros::Buffer tfBuffer_;
   tf2_ros::TransformBroadcaster tfBroadcaster_;
   tf2_ros::TransformListener tfListener{tfBuffer_};
-  ros::Publisher pub_pose_best_;
+  //ros::Publisher pub_pose_best_;
   ros::Publisher pub_original_msg_;
   ros::Publisher pub_pose_;
   ros::Publisher pub_pc2_;
@@ -275,6 +275,8 @@ protected:
   std::mutex best_result_mutex_;
   std::mutex cloud_update_mutex_;
   std::mutex mutex_best_cloud_;
+  std::mutex mutex_scene_cloud_;
+  std::mutex mutex_debug_cloud_;
   //std::mutex mutex_thread_icp_score;
 };
 
