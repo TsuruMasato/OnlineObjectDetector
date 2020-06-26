@@ -6,28 +6,30 @@ namespace segmentor
 void ex_segmentor::config(ros::NodeHandle &nh_private)
 {
   //LOG_INFO("start config")
-  nh_->param("remove_plane_enable", remove_plane_enable_, true);
-  nh_->param("region_limit_enable", region_limit_enable_, true);
-  nh_->param("voxel_filter_enable", voxel_filter_enable_, true);
-  nh_->param("icp_bottom_th_", icp_bottom_th_, 0.001050);
+  nh_->param("/online_object_detector/remove_plane_enable", remove_plane_enable_, true);
+  nh_->param("/online_object_detector/region_limit_enable", region_limit_enable_, true);
+  //nh_->param("/online_object_detector/voxel_filter_enable", voxel_filter_enable_, true);  //this contains a bug
+  voxel_filter_enable_ = true;
+  nh_->param("/online_object_detector/icp_bottom_th", icp_bottom_th_, 0.001050);
 
-  nh_->param("camera_odom_topic", camera_odom_topic_, std::string("/rtabmap/odom"));
-  nh_->param("target_object_pcd_path", target_object_pcd_path_, std::string("/home/masato/src/catkin_ws/grabo.pcd"));
-  nh_->param("point_cloud_subscribe_topic", point_cloud_subscribe_topic_, std::string("/camera/depth_registered/points"));
-  nh_->param("publish_best_result", publish_best_result_, true);
-  nh_->param("publish_result_as_tf", publish_result_as_tf_, false);
-  nh_->param("publish_result_as_pose", publish_result_as_pose_, true);
-  nh_->param("publish_result_as_original_msg", publish_result_as_original_msg_, true);
-  nh_->param("publish_result_as_PC2", publish_result_as_PC2_, false);
-  nh_->param("debug_mode", debug_mode_, true);
+  nh_->param("/online_object_detector/camera_odom_topic", camera_odom_topic_, std::string("/rtabmap/odom"));
+  nh_->param("/online_object_detector/target_object_pcd_path", target_object_pcd_path_, std::string("/home/masato/src/catkin_ws/grabo.pcd"));
+  nh_->param("/online_object_detector/point_cloud_subscribe_topic", point_cloud_subscribe_topic_, std::string("/camera/depth_registered/points"));
+  nh_->param("/online_object_detector/publish_best_result", publish_best_result_, true);
+  nh_->param("/online_object_detector/publish_result_as_tf", publish_result_as_tf_, false);
+  nh_->param("/online_object_detector/publish_result_as_pose", publish_result_as_pose_, true);
+  nh_->param("/online_object_detector/publish_result_as_original_msg", publish_result_as_original_msg_, true);
+  nh_->param("/online_object_detector/publish_result_as_PC2", publish_result_as_PC2_, false);
+  nh_->param("/online_object_detector/debug_mode", debug_mode_, true);
+  
   bool reset_flag = false;
-  if (nh_->getParam("reset_best_result", reset_flag) && reset_flag)
+  if (nh_->getParam("/online_object_detector/reset_best_result", reset_flag) && reset_flag)
   {
     reset_best_result();
-    nh_->setParam("reset_best_result", false);
+    nh_->setParam("/online_object_detector/reset_best_result", false);
   }
   //LOG_INFO("point_cloud_subscribe_topic_ :" << point_cloud_subscribe_topic_);
-  //LOG_INFO("voxel_filter_enable_ :" << voxel_filter_enable_);
+  LOG_INFO("voxel_filter_enable_ :" << voxel_filter_enable_);
 }
 
 void ex_segmentor::point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &input_msg)
