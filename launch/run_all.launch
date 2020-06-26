@@ -24,6 +24,7 @@
   <!-- <arg name="bagfile" default="/home/masato/rosbag/HRP2_Xtion_all_middle.bag"/> -->
 	<arg name="imagestopicname" default="/camera/rgb/image_rect_color"/>
 	<arg name="posetopicname" default="/grabo/pose"/>
+  <arg name="original_result_topic" default="registration_result"/>
   <arg name="initialposetopicname" default="target_object"/>
   <arg name="optimalInitialposetopicname" default="/grabo/pose/optimal_init"/>
 	<arg name="imagesdisplay" default="1"/>
@@ -47,6 +48,7 @@
   <node name="direct_3d_registration" pkg="ros_po3dt" type="direct_3d_registration"> <!--  output="screen" -->
   <param name="cameraTopic" type="string" value="$(arg imagestopicname)"/> 
   <param name="poseTopic" type="string" value="$(arg posetopicname)"/>
+  <param name="original_result_topic" type="string" value="$(arg original_result_topic)"/>
   <param name="initialPoseTopic" type="string" value="$(arg initialposetopicname)"/>
   <param name="optimalInitialPoseTopic" type="string" value="$(arg optimalInitialposetopicname)"/>
   <param name="opt_display" type="int" value="$(arg imagesdisplay)"/>
@@ -70,6 +72,8 @@
 <!--  <param name="image_transport" type="string" value="compressed"/> -->
   </node>
 
+  <arg name="rviz_cfg"                default="$(find online_object_detector)/launch/config/run_all.rviz" />
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_cfg)"/>  
   <!-- <node pkg="rosbag" type="play" name="rosbag_data_play" args="$(arg bagfile)" launch-prefix="bash -c 'sleep 2s; $0 $@' "/> -->
 
 </launch>
