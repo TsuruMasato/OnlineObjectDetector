@@ -21,7 +21,8 @@ void ex_segmentor::config(ros::NodeHandle &nh_private)
   nh_->param("/online_object_detector/publish_result_as_original_msg", publish_result_as_original_msg_, true);
   nh_->param("/online_object_detector/publish_result_as_PC2", publish_result_as_PC2_, false);
   nh_->param("/online_object_detector/debug_mode", debug_mode_, true);
-  
+  nh_->param("/online_object_detector/goICP_mode", goICP_mode_, true);
+
   bool reset_flag = false;
   if (nh_->getParam("/online_object_detector/reset_best_result", reset_flag) && reset_flag)
   {
@@ -73,6 +74,18 @@ void ex_segmentor::publish_all_reults()
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_));
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_, std::string("target_object/base_link")));
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_, std::string("target_object/body_link")));
+
+    if(goICP_mode_)
+    {
+      sensor_msgs::PointCloud2 obj_cloud_msg, camera_cloud_msg;
+      pcl::toROSMsg(*scene_, camera_cloud_msg);
+      camera_cloud_msg.header.frame_id = result_flame_id_;
+      pub_camera_cloud_.publish(camera_cloud_msg);
+      pcl::toROSMsg(*best_result_cloud_, obj_cloud_msg);
+      obj_cloud_msg.header.frame_id = result_flame_id_;
+      pub_best_cloud_.publish(obj_cloud_msg);
+    }
+
     //pub_pose_best_.publish(convert_result_Pose(best_result_));
     if (is_best_result_updated() /* && is_grobal_mode() */)
     {

@@ -223,6 +223,8 @@ protected:
   ros::Publisher pub_pose_;
   ros::Publisher pub_pc2_;
   ros::Publisher pub_debug_;
+  ros::Publisher pub_best_cloud_;
+  ros::Publisher pub_camera_cloud_;
   ros::Subscriber sub_camera_odom_;
   ros::Subscriber sub_point_cloud_;
 
@@ -238,6 +240,7 @@ protected:
   bool publish_result_as_PC2_;
   bool publish_result_as_original_msg_;
   bool debug_mode_;
+  bool goICP_mode_;
   double icp_bottom_th_;
   float FPFH_priority_score_;
   std::atomic<float> minimum_error_;

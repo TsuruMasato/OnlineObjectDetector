@@ -18,6 +18,7 @@
   <param name="debug_mode" type="bool" value="false"/>
   
   <param name="reset_best_result" type="bool" value="false"/>
+  <param name="goICP_mode" type="bool" value="true"/>
 
   </node>
 
