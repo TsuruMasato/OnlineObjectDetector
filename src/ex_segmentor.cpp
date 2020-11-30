@@ -16,8 +16,8 @@ ex_segmentor::ex_segmentor(ros::NodeHandle &nh)
   pub_pc2_ = nh_->advertise<sensor_msgs::PointCloud2>("icp_result", 1);
   pub_original_msg_ = nh_->advertise<mc_slam_project_msgs::objpos_viewpos>("result_msg", 1);
   pub_debug_ = nh_->advertise<sensor_msgs::PointCloud2>("inner_debug", 1);
-  pub_best_cloud_ = nh_->advertise<sensor_msgs::PointCloud2>("object_cloud", 1);
-  pub_camera_cloud_ = nh_->advertise<sensor_msgs::PointCloud2>("camera_cloud", 1);
+  pub_best_cloud_ = nh_->advertise<sensor_msgs::PointCloud2>("/online_object_detector/object_cloud", 1);
+  pub_camera_cloud_ = nh_->advertise<sensor_msgs::PointCloud2>("/online_object_detector/camera_cloud", 1);
 
   set_object_from_PCD_file(target_object_pcd_path_);
   init();
