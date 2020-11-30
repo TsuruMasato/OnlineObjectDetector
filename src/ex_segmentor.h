@@ -174,7 +174,7 @@ protected:
 
   void clustoring_with_color(pcl::PointCloud<PointXYZRGB>::Ptr &input_cloud, std::vector<pcl::PointCloud<PointXYZRGB>::Ptr> &clusters, int min_cluster_size = 100, float distance_th = 0.03f, float color_th = 12.0f, float region_color_th = 75, unsigned int num_nbr = 40);
 
-  bool object_size_check(pcl::PointCloud<PointXYZRGB>::Ptr &input_obj, pcl::PointCloud<PointXYZRGB>::Ptr &input_scene, const float size_th = 0.1);
+  bool object_size_check(pcl::PointCloud<PointXYZRGB>::Ptr &input_obj, pcl::PointCloud<PointXYZRGB>::Ptr &input_scene, const float size_th = 0.4);
 
   template <typename PointCloudPtr>
   bool icp_registration(PointCloudPtr &input_obj, PointCloudPtr &input_scene, PointCloudPtr &output_obj, Eigen::Matrix4f &result_transform, float &result_error, uint max_iteration = 20, float max_distance = 0.05f, float ransac_th = 0.05f);

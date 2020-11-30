@@ -147,6 +147,8 @@ bool ex_segmentor::run()
   {
     thread.join();
   }
+  //for (size_t i = 0; i < clusters.size(); i++)
+  //  add_pointcloud_to_debug_cloud(*clusters[i], uint(rand() % 256), uint(rand() % 256), uint(rand() % 256));
   std::cout << "finish multithreads registration" << std::endl;
 
   //ROS_INFO("%d results are stored in results_vector. Please use get_results_vector", results_vector_.size());
@@ -458,7 +460,7 @@ bool ex_segmentor::FPFH_matching(PointCloudPtr &object, FPFHCloud::Ptr &object_f
   align.setCorrespondenceRandomness(10);     // Number of nearest features to use 12
   align.setSimilarityThreshold(0.5f);        // Polygonal edge length similarity threshold 0.7
   align.setMaxCorrespondenceDistance(0.01f); // Inlier threshold
-  align.setInlierFraction(0.2f);             // Required inlier fraction for accepting a pose hypothesis 0.7
+  align.setInlierFraction(0.05f);             // Required inlier fraction for accepting a pose hypothesis 0.7
   align.align(*result_cloud);
   if (align.hasConverged())
   {
@@ -540,6 +542,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
     //ROS_INFO("cluseter size mismatch");
     return false;
   }
+  //ROS_WARN("cluster size match");
   add_pointcloud_to_debug_cloud(*cluster, uint(random() % 256), uint(random() % 256), uint(random() % 256));
 
   pcl::PointCloud<PointXYZRGB>::Ptr object_aligned(new pcl::PointCloud<PointXYZRGB>);
@@ -554,7 +557,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
   if (FPFH_match_success)
   {
     //add_pointcloud_to_debug_cloud(*object_aligned, 0, 0, 0);
-    // ROS_WARN("Features matched. now try ICP...");
+    //ROS_WARN("Features matched. now try ICP...");
 
 #endif
 #ifndef FPFH_MATCHING
@@ -591,7 +594,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
     else
     {
       add_pointcloud_to_debug_cloud(*Final, 100, 100, 100);
-      //ROS_INFO("ICP fitting socre was lower than threshold : %f", icp_score);
+      //ROS_INFO("ICP fitting socre was lower than threshold : %f", icp_error);
     }
 #ifdef FPFH_MATCHING
   }
@@ -605,7 +608,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
 
 void ex_segmentor::random_rotation()
 {
-  ROS_INFO("start random rotation");
+  //ROS_INFO("start random rotation");
   std::vector<std::thread> threads;
   extrime_icp_error_ = 100.0f;
   //Eigen::Matrix4f lowest_icp_result_transform;

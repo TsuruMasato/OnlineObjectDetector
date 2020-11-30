@@ -32,7 +32,7 @@
 	<arg name="modelfilename" default="/home/masato/src/catkin_ws/grabo_RGB_PC.ply"/>
 	<arg name="maskbasename" default="c_mask.png"/> 
   <arg name="resetpose" default="1"/>
-  <arg name="nbinitreg" default="0"/>
+  <arg name="nbinitreg" default="1"/>
   <arg name="nbreg" default="1"/>
   <arg name="manualpose" default="0"/>
   <arg name="sigmainit" default="4.01"/>
@@ -73,7 +73,7 @@
   </node>
 
   <arg name="rviz_cfg"                default="$(find online_object_detector)/launch/config/run_all.rviz" />
-  <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_cfg)"/>  
+  <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_cfg)"/> -->
   <!-- <node pkg="rosbag" type="play" name="rosbag_data_play" args="$(arg bagfile)" launch-prefix="bash -c 'sleep 2s; $0 $@' "/> -->
 
 </launch>
