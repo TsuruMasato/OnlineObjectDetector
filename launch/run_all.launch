@@ -7,7 +7,7 @@
   <param name="voxel_filter_enable" type="bool" value="true"/>
   <param name="icp_bottom_th" type="double" value="0.001050"/>
   <param name="camera_odom_topic" type="string" value="/rtabmap/odom"/>
-  <param name="target_object_pcd_path" type="string" value="/home/masato/src/catkin_ws/grabo.pcd"/>
+  <param name="target_object_pcd_path" type="string" value="/home/masato/src/catkin_ws/drill.pcd"/>
   <param name="point_cloud_subscribe_topic" type="string" value="/camera/depth_registered/points"/>
 
   <param name="publish_best_result" type="bool" value="true"/>
@@ -15,7 +15,7 @@
   <param name="publish_result_as_pose" type="bool" value="true"/>
   <param name="publish_result_as_original_msg" type="bool" value="true"/>
   <param name="publish_result_as_PC2" type="bool" value="false"/>
-  <param name="debug_mode" type="bool" value="false"/>
+  <param name="debug_mode" type="bool" value="true"/>
   
   <param name="reset_best_result" type="bool" value="false"/>
   <param name="goICP_mode" type="bool" value="true"/>
@@ -74,7 +74,7 @@
   </node>
 
   <arg name="rviz_cfg"                default="$(find online_object_detector)/launch/config/run_all.rviz" />
-  <!-- <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_cfg)"/> -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(arg rviz_cfg)"/>
   <!-- <node pkg="rosbag" type="play" name="rosbag_data_play" args="$(arg bagfile)" launch-prefix="bash -c 'sleep 2s; $0 $@' "/> -->
 
 </launch>

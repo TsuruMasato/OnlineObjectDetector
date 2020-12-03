@@ -30,6 +30,7 @@ void ex_segmentor::config(ros::NodeHandle &nh_private)
     nh_->setParam("/online_object_detector/reset_best_result", false);
   }
   //LOG_INFO("point_cloud_subscribe_topic_ :" << point_cloud_subscribe_topic_);
+  LOG_INFO("target_object_pcd_path_ : " << target_object_pcd_path_);
   LOG_INFO("voxel_filter_enable_ :" << voxel_filter_enable_);
 }
 
