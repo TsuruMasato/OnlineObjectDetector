@@ -52,7 +52,7 @@ public:
     Eigen::Vector3f pos;
     Eigen::Vector3f rpy;
     Eigen::Quaternionf quat;
-    float icp_score;
+    float icp_score = -0.1f;
 };
 
 } // namespace segmentor

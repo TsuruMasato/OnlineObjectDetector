@@ -210,7 +210,8 @@ protected:
 
   /* communication flags */
   bool initialized_;
-  bool best_result_updated_;
+  bool best_result_updated_ = false;
+  bool best_fpfh_updated_ = false;
   bool grobal_mode_ = true;
 
   /* ros */
@@ -261,6 +262,7 @@ protected:
   /*result information*/
   std::vector<ResultInformationSet> results_vector_;
   pcl::PointCloud<PointXYZRGB>::Ptr best_result_cloud_{new pcl::PointCloud<PointXYZRGB>};
+  pcl::PointCloud<PointXYZRGB>::Ptr best_fpfh_cloud_{new pcl::PointCloud<PointXYZRGB>};
 
   /*input scene and recognition target*/
   pcl::PointCloud<PointXYZRGB>::Ptr object_{new pcl::PointCloud<PointXYZRGB>};

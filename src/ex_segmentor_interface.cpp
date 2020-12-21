@@ -51,6 +51,7 @@ void ex_segmentor::reset_best_result()
   best_result_.transform = Eigen::Matrix4f::Identity();
   best_result_.generate(-100.0f);
   best_result_updated_ = false;
+  best_fpfh_updated_ = false;
 }
 
 //extrude the stacked results in this instance. and clear these stacks.
