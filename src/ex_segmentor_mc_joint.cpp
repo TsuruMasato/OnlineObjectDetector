@@ -54,12 +54,13 @@ void ex_segmentor::point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &
     ROS_WARN("%s", ex.what());
     /* test mode */
     ROS_WARN("No tf transforms found. Now process in input flame.");
-    result_flame_id_ = input_msg->header.frame_id;
-    set_scene(input_pc);
+    //result_flame_id_ = input_msg->header.frame_id;
+    //set_scene(input_pc);
     remove_plane_enable_ = false;
     region_limit_enable_ = false;
-    point_cloud_ready_ = true;
-    camera_pos_ready_ = true;
+    //point_cloud_ready_ = true;
+    //camera_pos_ready_ = true;
+
     //ros::Duration(1.0).sleep();
     //continue;
   }
@@ -68,7 +69,7 @@ void ex_segmentor::point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &
 void ex_segmentor::publish_all_reults()
 {
 
-  if (publish_best_result_ && best_result_.icp_score > 0.0f)
+  if (publish_best_result_ && best_result_.icp_score > 0.0f && is_best_result_updated())
   {
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_));
     tfBroadcaster_.sendTransform(convert_result_TF(best_result_, std::string("target_object/base_link")));

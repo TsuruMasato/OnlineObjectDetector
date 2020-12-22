@@ -152,9 +152,10 @@ bool ex_segmentor::run()
   std::cout << "finish multithreads registration" << std::endl;
 
   //ROS_INFO("%d results are stored in results_vector. Please use get_results_vector", results_vector_.size());
-  if (best_result_cloud_ != nullptr && best_result_cloud_->size() > 0 && best_result_updated_)
+  if (best_result_cloud_ != nullptr && best_result_cloud_->size() > 0)
   {
     best_fpfh_updated_ = false;
+    best_result_updated_ = false;
     if (is_best_result_inside())
     {
       random_rotation();
@@ -180,11 +181,8 @@ bool ex_segmentor::run()
       //   //detect that the object is not in sight.
       //   reset_best_result();
       // }
+      add_pointcloud_to_debug_cloud(*best_result_cloud_);
     }
-  }
-  else if (best_result_cloud_ != nullptr && best_result_cloud_->size() > 0)
-  {
-    add_pointcloud_to_debug_cloud(*best_result_cloud_);
   }
   publish_all_reults();
   return true;
@@ -587,7 +585,7 @@ bool ex_segmentor::object_registration(pcl::PointCloud<PointXYZRGB>::Ptr &cluste
         std::lock_guard<std::mutex> lock_guad(cloud_update_mutex_);
         pcl::copyPointCloud(*Final, *best_result_cloud_);
         best_fpfh_updated_ = true;
-        best_result_updated_ = true;
+        //best_result_updated_ = true;
       }
 
       return true;
@@ -626,55 +624,54 @@ void ex_segmentor::random_rotation()
   //   return;
   // }
 
-  for (size_t i = 0; i < 6; i++)
+  for (size_t i = 0; i < 3; i++)
   {
-    for (size_t j = 0; j < 3; j++)
+    for (size_t j = 0; j < 2; j++)
     {
-      size_t k = 0;
-      //for (size_t k = 0; k < 2; k++)
-      //{
-        //ROS_INFO("now:%d %d %d", i, j, k);
-        Eigen::Matrix4f rotation_matrix_X;
-        Eigen::Matrix4f rotation_matrix_Y;
-        Eigen::Matrix4f rotation_matrix_Z;
-        double theta_X = M_PI / 3.0 * 0.0;
-        double theta_Y = M_PI / 3.0 * 0.0;
-        double theta_Z = M_PI / 3.0 * i;
-        //行列を作成する 4x4
-        rotation_matrix_X << 1, 0, 0, 0, \ 
-                0,
-            cos(theta_X), -sin(theta_X), 0,
-            0, sin(theta_X), cos(theta_X), 0,
-            0, 0, 0, 1;
+      //size_t k = 0;
+      for (int n = -1; n < 2; n++)
+      {
+        for (int m = -1; m < 2; m++)
+        {
+          //ROS_INFO("now:%d %d %d", i, j, k);
+          Eigen::Matrix4f rotation_matrix_X;
+          Eigen::Matrix4f rotation_matrix_Y;
+          Eigen::Matrix4f rotation_matrix_Z;
+          double theta_X = M_PI / 3.0 * 0.0;
+          double theta_Y = M_PI / 3.0 * 0.0;
+          double theta_Z = M_PI / 3.0 * i;
+          //行列を作成する 4x4
+          rotation_matrix_X << 1, 0, 0, 0, \  
+          0, cos(theta_X), -sin(theta_X), 0,
+          0, sin(theta_X), cos(theta_X), 0,
+          0, 0, 0, 1;
 
-        rotation_matrix_Y << cos(theta_Y), 0, sin(theta_Y), 0, \ 
-                0,
-            1, 0, 0,
-            -sin(theta_Y), 0, cos(theta_Y), 0,
-            0, 0, 0, 1;
+          rotation_matrix_Y << cos(theta_Y), 0, sin(theta_Y), 0, \ 
+          0, 1, 0, 0,
+          -sin(theta_Y), 0, cos(theta_Y), 0,
+          0, 0, 0, 1;
 
-        rotation_matrix_Z << cos(theta_Z), -sin(theta_Z), 0, 0, \ 
-                sin(theta_Z),
-            cos(theta_Z), 0, 0,
-            0, 0, 1, 0,
-            0, 0, 0, 1;
+          rotation_matrix_Z << cos(theta_Z), -sin(theta_Z), 0, 0, \ 
+          sin(theta_Z), cos(theta_Z), 0, 0,
+          0, 0, 1, 0,
+          0, 0, 0, 1;
 
-        //Eigen::Matrix4f total_rotation = rotation_matrix_X * rotation_matrix_Y * rotation_matrix_Z * prev_best_result_rot;
-        Eigen::Matrix4f total_rotation = rotation_matrix_Z;
+          //Eigen::Matrix4f total_rotation = rotation_matrix_X * rotation_matrix_Y * rotation_matrix_Z * prev_best_result_rot;
+          Eigen::Matrix4f total_rotation = rotation_matrix_Z;
 
-        // if (!total_rotation.isUnitary())
-        // {
-        //   std::cout << "isUnitary2 :" << total_rotation.isUnitary() << std::endl;
-        //   continue;
-        // }
+          // if (!total_rotation.isUnitary())
+          // {
+          //   std::cout << "isUnitary2 :" << total_rotation.isUnitary() << std::endl;
+          //   continue;
+          // }
 
-        total_rotation(0, 3) = best_result_x;
-        total_rotation(1, 3) = best_result_y;
-        total_rotation(2, 3) = best_result_z - 0.05f * j;
+          total_rotation(0, 3) = best_result_x + 0.07f * n;
+          total_rotation(1, 3) = best_result_y + 0.07f * m;
+          total_rotation(2, 3) = best_result_z - 0.05f * j;
 
-        threads.emplace_back(std::thread(&ex_segmentor::three_steps_ICP_registration, this, std::ref(total_rotation)));
-
-      //}
+          threads.emplace_back(std::thread(&ex_segmentor::three_steps_ICP_registration, this, std::ref(total_rotation)));
+        }
+      }
     }
   }
   for (auto &thread : threads)
@@ -691,33 +688,37 @@ void ex_segmentor::three_steps_ICP_registration(Eigen::Matrix4f input_matrix)
   //回転
   pcl::PointCloud<PointXYZRGB>::Ptr rotated(new pcl::PointCloud<PointXYZRGB>);
   pcl::transformPointCloud(*object_, *rotated, input_matrix);
-  {
-    std::lock_guard<std::mutex> lock(mutex_best_cloud_);
-    add_pointcloud_to_debug_cloud(*rotated);
-  }
+  //{
+  //  std::lock_guard<std::mutex> lock(mutex_best_cloud_);
+  //  add_pointcloud_to_debug_cloud(*rotated);
+  //}
 
   float first_icp_error, second_icp_error, extrime_icp_error;
   Eigen::Matrix4f first_icp_transform, second_icp_transform, extrime_icp_transform;
   pcl::PointCloud<PointXYZRGB>::Ptr temp_icp_cloud(new pcl::PointCloud<PointXYZRGB>);
-  icp_registration(rotated, scene_, temp_icp_cloud, first_icp_transform, first_icp_error, 20, 0.03f, 0.01f);
+  icp_registration(rotated, scene_, temp_icp_cloud, first_icp_transform, first_icp_error, 10, 0.03f, 0.01f);
+  //icp_registration(rotated, scene_, temp_icp_cloud, first_icp_transform, first_icp_error, 20, 0.05f, 0.05f);
   //std::cout << first_icp_error << std::endl;
   if (first_icp_error < 0.1)
   {
-    icp_registration(temp_icp_cloud, scene_, temp_icp_cloud, second_icp_transform, second_icp_error, 20, 0.02f, 0.01f);
-    icp_registration(temp_icp_cloud, scene_, temp_icp_cloud, extrime_icp_transform, extrime_icp_error, 30, 0.017f, 0.01f);
+    ROS_WARN("passed 1st step!");
+    best_result_updated_ = true;
+    icp_registration(temp_icp_cloud, scene_, temp_icp_cloud, second_icp_transform, second_icp_error, 10, 0.03f, 0.02f);
+    icp_registration(temp_icp_cloud, scene_, temp_icp_cloud, extrime_icp_transform, extrime_icp_error, 15, 0.02f, 0.02f);
     if (extrime_icp_error < extrime_icp_error_)
     {
       extrime_icp_error_ = extrime_icp_error;
     }
-    if (extrime_icp_error < minimum_error_)
+    if (extrime_icp_error < minimum_error_ + 0.00005f)
     {
+      //ROS_WARN("arrived 2nd step!");
       Eigen::Matrix4f total_icp_transform = extrime_icp_transform * second_icp_transform * first_icp_transform * input_matrix;
-      if(total_icp_transform.isUnitary())
+      if(total_icp_transform.isUnitary() || true)
       {
+        //ROS_ERROR("arrived the final step!");
         //std::lock_guard<std::mutex> lock(mutex_best_cloud_);
         pcl::copyPointCloud(*temp_icp_cloud, *best_result_cloud_);
         update_best_result(total_icp_transform, extrime_icp_error);
-        best_result_updated_ = true;
       }
     }
   }
