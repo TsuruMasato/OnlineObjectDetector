@@ -128,41 +128,32 @@ Visualization Manager:
           Value: true
         camera_rgb_optical_frame:
           Value: true
-        guillaume_registration:
+        map:
           Value: true
-        target_object:
+        odom:
           Value: true
-        target_object/base_link:
-          Value: false
-        target_object/body_link:
-          Value: false
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        camera_link:
-          camera_depth_frame:
-            camera_depth_optical_frame:
-              {}
-          camera_rgb_frame:
-            camera_rgb_optical_frame:
-              guillaume_registration:
-                {}
-              target_object:
-                {}
-              target_object/base_link:
-                {}
-              target_object/body_link:
-                {}
+        map:
+          odom:
+            camera_link:
+              camera_depth_frame:
+                camera_depth_optical_frame:
+                  {}
+              camera_rgb_frame:
+                camera_rgb_optical_frame:
+                  {}
       Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: camera_link
+    Fixed Frame: map
     Frame Rate: 30
   Name: root
   Tools:
@@ -193,18 +184,18 @@ Visualization Manager:
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.2145657539367676
-        Y: -0.04963531345129013
-        Z: -0.16607238352298737
+        X: 0.6899532079696655
+        Y: 0.08732551336288452
+        Z: -0.5565464496612549
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5447964668273926
+      Pitch: 0.36479660868644714
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 4.0054240226745605
+      Yaw: 2.465421438217163
     Saved: ~
 Window Geometry:
   Displays:

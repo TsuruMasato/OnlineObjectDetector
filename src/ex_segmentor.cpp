@@ -696,7 +696,7 @@ void ex_segmentor::three_steps_ICP_registration(Eigen::Matrix4f input_matrix)
   float first_icp_error, second_icp_error, extrime_icp_error;
   Eigen::Matrix4f first_icp_transform, second_icp_transform, extrime_icp_transform;
   pcl::PointCloud<PointXYZRGB>::Ptr temp_icp_cloud(new pcl::PointCloud<PointXYZRGB>);
-  icp_registration(rotated, scene_, temp_icp_cloud, first_icp_transform, first_icp_error, 10, 0.03f, 0.01f);
+  icp_registration(rotated, scene_, temp_icp_cloud, first_icp_transform, first_icp_error, 10, 0.05f, 0.05f);
   //icp_registration(rotated, scene_, temp_icp_cloud, first_icp_transform, first_icp_error, 20, 0.05f, 0.05f);
   //std::cout << first_icp_error << std::endl;
   if (first_icp_error < 0.1)
