@@ -1,5 +1,9 @@
 Online Object Detector
 
+https://www.youtube.com/watch?v=agjsPMJshy0
+
+https://youtu.be/2rr84jnez4k
+
 input1 : RGB-D colored PointCloud for scene
 input2 : non-colored .PCD (point cloud data) of target object
 
@@ -8,9 +12,11 @@ output : 6DoF estimation result in various ros style (tf flame, Pose, etc...).
 How to build :
 in your catkin workspace,
 
-git clone https://gite.lirmm.fr/chappellet/online_object_detector
-cd online_object_detector
-catkin build (or catkin_make)
+`git clone https://github.com/TsuruMasato/OnlineObjectDetector`
+
+`cd online_object_detector`
+
+`catkin build (or catkin_make)`
 
 
 How to run :
@@ -29,3 +35,11 @@ If you don't have PCD file, you can use PCD generator.
 and you can see the estimation result in Rviz, at camera flame.
 
 I will make roslaunch file to make more convenient.
+
+Citation
+
+if you use this module for your research, business, or some other things, please cite our paper.
+
+"Online Object Searching by a Humanoid Robot in an Unkown Environment"
+M.Tsuru et al. ICRA-RAL, 2021.
+https://ieeexplore.ieee.org/document/9361266
