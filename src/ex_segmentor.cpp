@@ -79,16 +79,16 @@ bool ex_segmentor::run()
   //LOG_INFO("start run()")
   if (!initialized_)
   {
-    LOG_ERROR("Please initialize this instance by init()")
+    ROS_ERROR("Please initialize this instance by init()");
     return false;
   }
   
   if(!point_cloud_ready_ || !camera_pos_ready_)
   {
     if (!point_cloud_ready_)
-      LOG_ERROR("No input cloud")
+      ROS_ERROR("No input cloud");
     if (!camera_pos_ready_)
-      LOG_ERROR("No input camera")
+      ROS_ERROR("No input camera");
     return false;
   }
 

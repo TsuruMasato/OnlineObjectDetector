@@ -1,0 +1,10 @@
+<launch>
+  <include file="$(find azure_kinect_ros_driver)/launch/driver.launch"/>
+  <node name="online_object_detector" pkg="online_object_detector" type="online_object_detector">
+    <param name="point_cloud_subscribe_topic" value="/points2"/>
+  </node>
+  <!-- <node pkg="rosbag" type="play" name="rosbag_data_play" args="$(arg bagfile)" launch-prefix="bash -c 'sleep 2s; $0 $@' "/> -->
+
+</launch>
+
+

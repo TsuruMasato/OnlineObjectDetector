@@ -47,7 +47,7 @@ Output : 6DoF (x,y,z,r,p,y) pose and tf flame
 //#include <pcl/registration/gicp.h>
 
 // ROS
-#include <mc_rtc/ros.h>
+// #include <mc_rtc/ros.h>
 #include <geometry_msgs/Pose.h>
 #include <nav_msgs/Odometry.h>
 #include <tf/tf.h>
@@ -60,7 +60,7 @@ Output : 6DoF (x,y,z,r,p,y) pose and tf flame
 #include <pcl_ros/point_cloud.h>
 #include <pcl_ros/transforms.h>
 
-#include <mc_rtc/logging.h>
+// #include <mc_rtc/logging.h>
 #include <mc_slam_project_msgs/objpos_viewpos.h>
 #include "result_information_set.h"
 

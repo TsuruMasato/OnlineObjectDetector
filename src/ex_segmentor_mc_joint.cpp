@@ -29,7 +29,7 @@ void ex_segmentor::config(ros::NodeHandle &nh_private)
     nh_->setParam("/online_object_detector/reset_best_result", false);
   }
   //LOG_INFO("point_cloud_subscribe_topic_ :" << point_cloud_subscribe_topic_);
-  LOG_INFO("voxel_filter_enable_ :" << voxel_filter_enable_);
+  ROS_INFO("voxel_filter_enable_ : %d", voxel_filter_enable_);
 }
 
 void ex_segmentor::point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &input_msg)
@@ -58,8 +58,8 @@ void ex_segmentor::point_cloud_callback(const sensor_msgs::PointCloud2ConstPtr &
     //set_scene(input_pc);
     remove_plane_enable_ = false;
     region_limit_enable_ = false;
-    //point_cloud_ready_ = true;
-    //camera_pos_ready_ = true;
+    point_cloud_ready_ = true;
+    // camera_pos_ready_ = true;
 
     //ros::Duration(1.0).sleep();
     //continue;

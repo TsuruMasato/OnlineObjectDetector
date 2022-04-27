@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   pcl_ros
+  # mc_rtc_ros
   tf
   tf2
 )
